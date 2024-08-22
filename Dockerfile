@@ -17,7 +17,6 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y ansible
 
-COPY . /app
+COPY . .
 
-# Set the default command to run when the container starts
-CMD ["bash"]
+CMD ["sh", "-c", "ansible-playbook $TAGS local.yaml && exec zsh"]
