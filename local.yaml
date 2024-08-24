@@ -6,5 +6,12 @@
       - dev-tools
       - terminal
 
-    - include_tasks: tasks/install-asdf.yaml
-    - include_tasks: tasks/install-node-via-asdf.yaml
+    - name: Install asdf
+      include_tasks: tasks/install-asdf.yaml
+      tags:
+      - dev-tools
+
+    - name: Install Node and NPM
+      include_tasks: tasks/install-node-via-asdf.yaml
+      tags:
+      - dev-tools
