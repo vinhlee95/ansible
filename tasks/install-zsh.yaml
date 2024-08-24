@@ -1,13 +1,28 @@
-- name: Install zsh
+- name: Check OS
+  debug:
+    var: ansible_os_family
+
+- name: Install zsh on Linux
   apt: 
     name: zsh
+  when: ansible_os_family == 'Debian'
+
+- name: Install zsh on macOS
+  homebrew:
+    name: zsh
+    state: present
+  when: ansible_os_family == "Darwin"
+
 - name: Change shell
   shell: chsh -s `which zsh`
+
 - name: Install oh-my-zsh
   shell: sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
 - name: Install zsh-autosuggestions
   ansible.builtin.git:
     repo: 'https://github.com/zsh-users/zsh-autosuggestions.git'
     dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
+
 - name: Update our zshrc
   shell: echo "source ~/.oh-my-zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" >> ~/.zshrc
