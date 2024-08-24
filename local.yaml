@@ -1,5 +1,10 @@
 - hosts: localhost
   tasks: 
-    - include_tasks: tasks/install-zsh.yaml
+    - name: Install zsh
+      include_tasks: tasks/install-zsh.yaml
+      tags:
+      - dev-tools
+      - terminal
+
     - include_tasks: tasks/install-asdf.yaml
     - include_tasks: tasks/install-node-via-asdf.yaml

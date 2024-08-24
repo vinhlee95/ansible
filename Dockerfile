@@ -19,4 +19,4 @@ RUN apt-get update && \
 
 COPY . .
 
-CMD ["sh", "-c", "ansible-playbook $TAGS local.linux.yaml && exec bash"]
+CMD ["sh", "-c", "ansible-playbook local.yaml --tags 'dev-tools' && exec bash"]
