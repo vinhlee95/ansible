@@ -3,17 +3,38 @@
       git:
         repo: 'https://github.com/asdf-vm/asdf.git'
         dest: "{{ ansible_env.HOME }}/.asdf"
-        version: 'v0.14.0'  # You can specify the version you want to install
+        version: 'v0.14.1'  # https://asdf-vm.com/guide/getting-started.html
 
-    - name: Add asdf to .bashrc
+    - name: Debug system shell
+      debug:
+        var: ansible_env.SHELL
+
+    - name: Add asdf to .zshrc (for Zsh)
       lineinfile:
-        path: "{{ ansible_env.HOME }}/.bashrc"
+        path: "{{ ansible_env.HOME }}/.zshrc"
         line: |
           . $HOME/.asdf/asdf.sh
           . $HOME/.asdf/completions/asdf.bash
+      when: ansible_env.SHELL == "/bin/zsh"
 
-    - name: Source .bashrc to apply changes
-      shell: source "{{ ansible_env.HOME }}/.bashrc"
+    - name: Add asdf to .bash_profile (for Bash)
+      lineinfile:
+        path: "{{ ansible_env.HOME }}/.bash_profile"
+        line: |
+          . $HOME/.asdf/asdf.sh
+          . $HOME/.asdf/completions/asdf.bash
+      when: ansible_env.SHELL == "/bin/bash"
+
+    - name: Source .zshrc to apply changes (for Zsh)
+      shell: source "{{ ansible_env.HOME }}/.zshrc"
+      args:
+        executable: /bin/zsh
+      when: ansible_env.SHELL == "/bin/zsh"
+
+    - name: Source .bash_profile to apply changes (for Bash)
+      shell: source "{{ ansible_env.HOME }}/.bash_profile"
       args:
         executable: /bin/bash
+      when: ansible_env.SHELL == "/bin/bash"
+      
   tags: dev-tools
