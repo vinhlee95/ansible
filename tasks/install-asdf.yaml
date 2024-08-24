@@ -1,0 +1,17 @@
+- name: Clone asdf repository
+  git:
+    repo: 'https://github.com/asdf-vm/asdf.git'
+    dest: "{{ ansible_env.HOME }}/.asdf"
+    version: 'v0.14.0'  # You can specify the version you want to install
+
+- name: Add asdf to .bashrc
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    line: |
+      . $HOME/.asdf/asdf.sh
+      . $HOME/.asdf/completions/asdf.bash
+
+- name: Source .bashrc to apply changes
+  shell: source "{{ ansible_env.HOME }}/.bashrc"
+  args:
+    executable: /bin/bash

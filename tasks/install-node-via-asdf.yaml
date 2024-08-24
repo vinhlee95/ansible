@@ -1,0 +1,25 @@
+- name: Ensure asdf is installed
+  stat:
+    path: "{{ ansible_env.HOME }}/.asdf"
+  register: asdf_installed
+
+- name: Install asdf NodeJS plugin
+  command: "{{ ansible_env.HOME }}/.asdf/bin/asdf plugin-add nodejs"
+  args:
+    creates: "{{ ansible_env.HOME }}/.asdf/plugins/nodejs"
+  when: asdf_installed.stat.exists
+  environment:
+    ASDF_DIR: "{{ ansible_env.HOME }}/.asdf"
+    PATH: "{{ ansible_env.HOME }}/.asdf/bin:{{ ansible_env.HOME }}/.asdf/shims:{{ ansible_env.PATH }}"
+
+- name: Install latest NodeJS version
+  command: "{{ ansible_env.HOME }}/.asdf/bin/asdf install nodejs latest"
+  environment:
+    ASDF_DIR: "{{ ansible_env.HOME }}/.asdf"
+    PATH: "{{ ansible_env.HOME }}/.asdf/bin:{{ ansible_env.HOME }}/.asdf/shims:{{ ansible_env.PATH }}"
+
+- name: Set latest NodeJS version as global
+  command: "{{ ansible_env.HOME }}/.asdf/bin/asdf global nodejs latest"
+  environment:
+    ASDF_DIR: "{{ ansible_env.HOME }}/.asdf"
+    PATH: "{{ ansible_env.HOME }}/.asdf/bin:{{ ansible_env.HOME }}/.asdf/shims:{{ ansible_env.PATH }}"
